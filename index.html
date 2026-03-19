@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Mundo de Mía - Ground Zero</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="theme-color" content="#0A0A0F">
+</head>
+
+<body data-mundo="1">
+    <div class="crystal-particles" id="crystal-particles"></div>
+
+    <div id="splash-screen">
+        <div class="mia-avatar-container float-element" id="splash-avatar">
+            <img src="./assets/mia/mia_granjera.png" id="splash-avatar-img" alt="Mía" loading="eager">
+        </div>
+        <h2 class="neon-text">EL MUNDO DE MÍA</h2>
+        <div class="loader-container">
+            <div class="loader-bar" id="loader-bar"></div>
+        </div>
+        <p id="splash-status" style="margin-top: 15px; font-size: 0.9rem; color: rgba(255,255,255,0.6);">Iniciando
+            sistemas...</p>
+    </div>
+
+    <!-- User Selection Modal -->
+    <div id="user-select-modal" class="user-modal">
+        <div class="user-modal-content">
+            <div class="user-modal-header">
+                <span class="user-modal-icon">👤</span>
+                <h2 class="neon-text" style="margin: 0;">SELECCIONA TU PERFIL</h2>
+            </div>
+            <div id="user-list" class="user-list">
+                <!-- Usuarios dinámicos -->
+            </div>
+        </div>
+    </div>
+
+    <div id="app" style="display: none;">
+        <div class="main-layout">
+            <!-- Right Side: Menu Content -->
+            <div class="mia-container glass-panel neon-glow-cyan" id="main-frame">
+                <header id="main-header"
+                    style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+                    
+                    <!-- Indicador de Mundo Actual -->
+                    <div id="world-indicator" style="display: none; align-items: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 4px 12px; border-radius: 15px; border: 1px solid var(--neon-blue); margin-bottom: 0.5rem;">
+                        <span id="world-indicator-icon">🌿</span>
+                        <span id="world-indicator-name" style="font-size: 0.7rem; color: var(--neon-blue); font-weight: 600;">BOSQUE NEÓN</span>
+                    </div>
+                    
+                    <div id="player-info" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <h3 id="player-name" class="neon-text"
+                            style="font-size: 1.3rem; margin:0; letter-spacing: 2px;">MÍA</h3>
+                        <div id="player-level-badge" class="glass-panel"
+                            style="font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; background: rgba(0,212,255,0.15); border: 1px solid var(--neon-blue); display: flex; align-items: center; gap: 6px;">
+                            <span style="color: var(--neon-blue);">📍</span>
+                            <span id="player-level">Nivel 1</span>
+                        </div>
+                        <button id="btn-change-user" class="glass-panel"
+                            style="padding: 4px 10px; border-radius: 12px; border: 1px solid var(--neon-pink); cursor: pointer; background: rgba(255,0,255,0.1); color: var(--neon-pink); font-size: 0.7rem; transition: all 0.3s; min-width: 32px; min-height: 32px;"
+                            title="Cambiar Usuario">🔄</button>
+                    </div>
+                    <div id="score-container" class="glass-panel"
+                        style="display: flex; align-items: center; gap: 8px; padding: 6px 15px; border-radius: 25px; border-color: var(--neon-pink); background: rgba(255,0,255,0.1);">
+                        <span style="color: var(--neon-gold); font-size: 1rem;">⭐</span>
+                        <span id="player-points"
+                            style="font-family: monospace; font-size: 1rem; letter-spacing: 1px; color: var(--neon-gold); font-weight: 700;">0000</span>
+                        <button id="btn-toggle-audio" class="glass-panel"
+                            style="margin-left: 5px; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--neon-cyan); cursor: pointer; background: rgba(0,212,255,0.1); color: white; transition: all 0.3s; font-size: 0.8rem;"
+                            title="Audio">🔊</button>
+                    </div>
+                    <!-- Indicador de Racha -->
+                    <div id="streak-indicator" class="glass-panel"
+                        style="display: none; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; border-color: #FF6B35; background: rgba(255,107,53,0.2); margin-left: 8px;">
+                        <span id="streak-fire" style="font-size: 1.2rem;">🔥</span>
+                        <span id="streak-count" style="font-family: monospace; font-size: 0.9rem; color: #FF6B35; font-weight: 700;">0</span>
+                    </div>
+                </header>
+
+                <main id="menu-content" style="width: 100%;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h1 class="neon-text" id="main-title"
+                            style="font-size: 3rem; margin-bottom: 0.2rem; filter: drop-shadow(0 0 10px var(--neon-glow));">
+                            SISTEMA CENTRAL</h1>
+                        <p style="opacity: 0.4; letter-spacing: 5px; font-weight: 300; font-size: 0.7rem;">MÓDULOS
+                            ACTIVOS</p>
+                    </div>
+
+                    <!-- Selector de Grado -->
+                    <div id="grade-selector" class="grade-container">
+                        <div class="grade-title">🎓 SELECCIONA TU GRADO</div>
+                        <div class="grade-options">
+                            <button class="grade-btn active" data-grade="3" id="grade-3-btn">
+                                <span class="grade-icon">🌾</span>
+                                <span class="grade-name">3° GRADO</span>
+                                <span class="grade-subtitle">La Granja</span>
+                            </button>
+                            <button class="grade-btn locked" data-grade="4" id="grade-4-btn">
+                                <span class="grade-icon">🔒</span>
+                                <span class="grade-name">4° GRADO</span>
+                                <span class="grade-subtitle">El Mundo de Mía</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- MUNDOS DE LA GRANJA (GRADO 3) -->
+                    <div class="menu-grid" id="world-selector-granja" data-grade="3">
+                        <!-- Mundo 1: COSECHA DE NÚMEROS (Suma) -->
+                        <div class="glass-panel level-card world-card world-card-granja-1" id="granja-1-card" data-mundo-id="1" data-grade="3"
+                            style="background: linear-gradient(135deg, rgba(50,205,50,0.3) 0%, rgba(34,139,34,0.3) 100%);">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: #32CD32; color: #000; font-size: 0.55rem; padding: 2px 8px;">MUNDO 1</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">🌾 COSECHA DE NÚMEROS</h4>
+                                <p style="margin: 0; font-size: 0.55rem; opacity: 0.7;">Suma - Niveles 1-5</p>
+                                <span class="world-status-text" style="font-size: 0.6rem; color: #32CD32; margin-top: 4px;">▶ JUGAR</span>
+                            </div>
+                        </div>
+
+                        <!-- Mundo 2: LIMPIEZA DE MALEZA (Resta) -->
+                        <div class="glass-panel level-card world-locked world-card world-card-granja-2" id="granja-2-card" data-mundo-id="6" data-grade="3"
+                            style="background: linear-gradient(135deg, rgba(139,69,19,0.3) 0%, rgba(101,67,33,0.3) 100%);">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: #8B4513; color: #fff; font-size: 0.55rem; padding: 2px 8px;">MUNDO 2</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">🌿 LIMPIEZA DE MALEZA</h4>
+                                <p style="margin: 0; font-size: 0.55rem;" id="granja-2-status">🔒 Resta - Niveles 6-10</p>
+                            </div>
+                        </div>
+
+                        <!-- Mundo 3: DUPLICADOR DE SEMILLAS (Multiplicación) -->
+                        <div class="glass-panel level-card world-locked world-card world-card-granja-3" id="granja-3-card" data-mundo-id="11" data-grade="3"
+                            style="background: linear-gradient(135deg, rgba(255,191,0,0.3) 0%, rgba(255,140,0,0.3) 100%);">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: #FFBF00; color: #000; font-size: 0.55rem; padding: 2px 8px;">MUNDO 3</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">🌻 DUPLICADOR DE SEMILLAS</h4>
+                                <p style="margin: 0; font-size: 0.55rem;" id="granja-3-status">🔒 Multiplicación - Niveles 11-15</p>
+                            </div>
+                        </div>
+
+                        <!-- Mundo 4: REPARTO DEL GRANERO (División) -->
+                        <div class="glass-panel level-card world-locked world-card world-card-granja-4" id="granja-4-card" data-mundo-id="16" data-grade="3"
+                            style="background: linear-gradient(135deg, rgba(139,0,0,0.3) 0%, rgba(101,0,0,0.3) 100%);">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: #8B0000; color: #fff; font-size: 0.55rem; padding: 2px 8px;">MUNDO 4</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">🏠 REPARTO DEL GRANERO</h4>
+                                <p style="margin: 0; font-size: 0.55rem;" id="granja-4-status">🔒 División - Niveles 16-20</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MUNDOS DEL MUNDO DE MÍA (GRADO 4) -->
+                    <div class="menu-grid" id="world-selector" data-grade="4" style="display: none;">
+                        <!-- Mundo 1 -->
+                        <div class="glass-panel level-card neon-glow-cyan world-card" id="world-1-card" data-mundo-id="1" data-grade="4"
+                            style="background-image: url('./assets/bg/bosque_neon_card.png'); background-size: cover; background-position: center;">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: var(--neon-blue); color: #000; font-size: 0.55rem; padding: 2px 8px;">MUNDO 1</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">🌿 BOSQUE NEÓN</h4>
+                                <p style="margin: 0; font-size: 0.55rem; opacity: 0.7;">Niveles 1-10</p>
+                                <span class="world-status-text" style="font-size: 0.6rem; color: var(--neon-blue); margin-top: 4px;">▶ JUGAR</span>
+                            </div>
+                        </div>
+
+                        <!-- Mundo 2 -->
+                        <div class="glass-panel level-card world-locked world-card" id="world-2-card" data-mundo-id="2" data-grade="4"
+                            style="background-image: url('./assets/bg/ciudad_cristal_card.png'); background-size: cover; background-position: center;">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: #8A2BE2; color: #fff; font-size: 0.55rem; padding: 2px 8px;">MUNDO 2</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">💎 CIUDAD CRISTAL</h4>
+                                <p style="margin: 0; font-size: 0.55rem;" id="world-2-status">🔒 Niveles 11-15</p>
+                            </div>
+                        </div>
+
+                        <!-- Mundo 3 -->
+                        <div class="glass-panel level-card world-locked world-card" id="world-3-card" data-mundo-id="3" data-grade="4"
+                            style="background-image: url('./assets/bg/templo_circuitos_card.png'); background-size: cover; background-position: center;">
+                            <div class="card-info">
+                                <span class="world-badge"
+                                    style="background: #FFD700; color: #000; font-size: 0.55rem; padding: 2px 8px;">MUNDO 3</span>
+                                <h4 style="margin: 4px 0; font-size: 0.85rem;">⚡ TEMPLO CIRCUITOS</h4>
+                                <p style="margin: 0; font-size: 0.55rem;" id="world-3-status">🔒 Niveles 16-20</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div style="display: flex; gap: 1rem; margin-top: 3rem; justify-content: center;">
+                        <button id="btn-options" class="glass-panel"
+                            style="padding: 1rem 3rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.1); color: white; cursor: pointer; flex: none; width: 200px;">SISTEMA</button>
+                    </div>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Levels Selection Modal -->
+    <div id="levels-modal" class="modal-overlay">
+        <div class="glass-panel modal-box neon-glow-cyan" id="levels-modal-box">
+            <button id="btn-close-levels" class="btn-close-modal">✖</button>
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <h1 class="neon-text" id="levels-title" style="font-size: 2rem; margin-bottom: 0.2rem;">BOSQUE NEÓN
+                </h1>
+                <p style="opacity: 0.4; letter-spacing: 5px; font-weight: 300; font-size: 0.65rem;">RED DE ENLACE</p>
+            </div>
+
+            <!-- Progress indicator -->
+            <div id="levels-progress" style="text-align: center; margin-bottom: 0.8rem;">
+                <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); padding: 6px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                    <span style="color: var(--neon-pink); font-size: 0.8rem;">📊</span>
+                    <span id="levels-progress-text" style="color: rgba(255,255,255,0.8); font-size: 0.75rem;">0/10 completados</span>
+                </div>
+            </div>
+
+            <div class="levels-grid" id="levels-container">
+                <!-- Levels JS -->
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 0.8rem; margin-top: 1.2rem;">
+                <button id="btn-reset-progress" class="glass-panel"
+                    style="padding: 0.5rem 1.2rem; border-radius: 10px; border: 1.5px solid var(--neon-pink); color: var(--neon-pink); cursor: pointer; font-size: 0.75rem; background: rgba(255,0,255,0.1);">REINICIAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portal Transition Overlay -->
+    <div id="portal-overlay">
+        <div class="portal-ring"></div>
+        <h2 class="neon-text"
+            style="font-size: 2rem; margin-top: 2rem; filter: drop-shadow(0 0 10px var(--neon-blue));">SINTONIZANDO
+            RED...</h2>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container"></div>
+
+    <!-- World Complete Overlay -->
+    <div id="world-complete-overlay">
+        <div class="celebration-content">
+            <div class="celebration-icon">🎉</div>
+            <h1 id="world-complete-title">¡MUNDO COMPLETADO!</h1>
+            <p id="world-complete-message">Has desbloqueado el siguiente mundo</p>
+            <button id="btn-world-complete-continue" class="btn-primary" style="margin-top: 1rem;">CONTINUAR</button>
+        </div>
+    </div>
+
+    <!-- Global Floating Avatar (Mía) -->
+    <aside class="mia-star-sidebar float-element" id="global-mia-sidebar" style="display: none;">
+        <div class="mia-star-container neon-glow-cyan glass-panel">
+            <div class="mia-star-particles">
+                <div class="mia-particle"></div>
+                <div class="mia-particle"></div>
+                <div class="mia-particle"></div>
+                <div class="mia-particle"></div>
+                <div class="mia-particle"></div>
+            </div>
+            <div class="parallax-layers" id="mia-parallax">
+                <img src="./assets/mia/mia_granjera.png" alt="Mía Star" id="mia-star-main" class="layer" data-depth="0.1" loading="lazy">
+                <div class="layer glass-reflection" data-depth="0.4"></div>
+            </div>
+            <div id="mia-blink"></div>
+            <div class="avatar-status-badge neon-glow-pink">EN LÍNEA</div>
+        </div>
+
+        <!-- Mía's Speech Bubble -->
+        <div id="mia-dialogue" class="mia-speech-bubble" style="position: relative;">
+            <button id="btn-close-bubble" class="btn-close-bubble">✖</button>
+            <div id="mia-text" class="typewriter-text"></div>
+            <button id="btn-vamos">¡Vamos!</button>
+        </div>
+    </aside>
+
+    <!-- Challenge Modal -->
+    <div id="challenge-modal" class="modal-overlay">
+        <div class="glass-panel challenge-box neon-glow-pink" style="position: relative;">
+            <!-- Close Button -->
+            <button id="btn-close-modal" class="btn-close-modal">✖</button>
+
+            <div style="margin-bottom: 1rem;">
+                <span id="challenge-level-badge" style="display: inline-block; background: var(--neon-pink); color: #000; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; margin-bottom: 0.5rem;">NIVEL 1</span>
+                <h2 class="neon-text" style="color: var(--neon-pink); font-size: 1.5rem; margin-bottom: 0.5rem;"
+                    id="challenge-type">TIPO DE RETO</h2>
+            </div>
+            
+            <p id="challenge-question" style="font-size: 1.2rem; line-height: 1.5; opacity: 0.9; margin-bottom: 1.5rem;">Cargando interrogante
+                del sistema...</p>
+
+            <div class="challenge-options" id="challenge-options-container">
+                <!-- Opciones dinámicas -->
+            </div>
+
+            <p id="challenge-feedback" style="margin-top: 1.5rem; font-weight: bold; font-size: 1rem; display: none; padding: 0.8rem; border-radius: 10px;">
+            </p>
+        </div>
+        
+        <!-- Lupa de Mía (Aprender a Aprender) -->
+        <div id="lupa-overlay">
+            <div class="lupa-container">
+                <span class="lupa-icon">🔍</span>
+                <div class="lupa-title">¡Truco de Mía!</div>
+                <div class="lupa-box">
+                    <p id="lupa-trick-text" class="lupa-text">Analizando patrón...</p>
+                </div>
+                <button id="btn-lupa-continuar">ENTENDIDO</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         RULETA DE PUNTOS - BONUS MUNDOS
+         ========================================== -->
+    <div id="roulette-overlay" class="bonus-overlay">
+        <div class="roulette-container">
+            <div class="roulette-title">🎰 ¡GIRA LA RULETA! 🎰</div>
+            <div class="roulette-subtitle">¿Cuántos puntos bonus quieres?</div>
+            
+            <div class="roulette-wheel" id="roulette-wheel">
+                <div class="roulette-segment segment-1">+50</div>
+                <div class="roulette-segment segment-2">+100</div>
+                <div class="roulette-segment segment-3">+150</div>
+                <div class="roulette-segment segment-4">x2</div>
+                <div class="roulette-segment segment-5">+200</div>
+                <div class="roulette-segment segment-6">+50</div>
+                <div class="roulette-segment segment-7">+75</div>
+                <div class="roulette-segment segment-8">¡+500!</div>
+                <div class="roulette-pointer"></div>
+            </div>
+            
+            <button id="btn-spin-roulette" class="btn-spin">¡GIRAR!</button>
+            
+            <div class="roulette-result" id="roulette-result" style="display: none;">
+                <div class="roulette-result-text">¡Ganaste: <span id="roulette-prize">0</span> puntos!</div>
+                <button id="btn-claim-roulette" class="btn-claim">¡COBRAR!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         DESAFÍO RÁPIDO - MINI JUEGO
+         ========================================== -->
+    <div id="quick-challenge-overlay" class="bonus-overlay">
+        <div class="quick-challenge-container">
+            <div class="quick-title">⚡ ¡DESAFÍO RÁPIDO! ⚡</div>
+            <div class="quick-subtitle">Responde 3 preguntas en 5 segundos</div>
+            
+            <div class="quick-timer" id="quick-timer">
+                <div class="quick-timer-bar" id="quick-timer-bar"></div>
+            </div>
+            
+            <div class="quick-question" id="quick-question">
+                <div class="quick-level">Pregunta <span id="quick-current">1</span>/3</div>
+                <div class="quick-text" id="quick-text">Cargando...</div>
+            </div>
+            
+            <div class="quick-options" id="quick-options">
+                <button class="quick-option" data-answer="a">-</button>
+                <button class="quick-option" data-answer="b">-</button>
+                <button class="quick-option" data-answer="c">-</button>
+                <button class="quick-option" data-answer="d">-</button>
+            </div>
+            
+            <div class="quick-score">
+                <span>Aciertos: <span id="quick-correct">0</span>/3</span>
+                <span>Puntos: <span id="quick-points">0</span></span>
+            </div>
+            
+            <div class="quick-result" id="quick-result" style="display: none;">
+                <div class="quick-result-icon" id="quick-result-icon">🎉</div>
+                <div class="quick-result-text" id="quick-result-text">¡Felicidades!</div>
+                <div class="quick-result-points" id="quick-result-points">+0 puntos</div>
+                <button id="btn-claim-quick" class="btn-claim">¡COBRAR!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MÍA TEORÍA - TRUCO PEDAGÓGICO
+         ========================================== -->
+    <div id="mia-teoria-overlay" class="modal-overlay">
+        <div class="mia-teoria-container glass-panel">
+            <button id="btn-close-teoria" class="btn-close-modal">✖</button>
+            
+            <div class="teoria-header">
+                <div class="teoria-mia-avatar">
+                    <img src="./assets/mia/mia_granjera.png" alt="Mía" style="width: 80px;">
+                </div>
+                <div class="teoria-title">💡 TRUCO DE MÍA</div>
+            </div>
+            
+            <div class="teoria-content">
+                <div class="teoria-type" id="teoria-tipo">SUMA</div>
+                <div class="teoria-text" id="teoria-texto">
+                    Cargando el truco mágico...
+                </div>
+                <div class="teoria-example" id="teoria-ejemplo">
+                    Ejemplo visual aparecería aquí
+                </div>
+            </div>
+            
+            <button id="btn-teoria-understood" class="btn-understood">
+                ¡Entendido! ¡A practicar! 🎯
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         BIBLIOTECA DE CRISTAL - PREMIOS COLECCIONABLES
+         ========================================== -->
+    <div id="library-overlay" class="modal-overlay">
+        <div class="library-container glass-panel">
+            <button id="btn-close-library" class="btn-close-modal">✖</button>
+            
+            <div class="library-header">
+                <div class="library-icon">📚</div>
+                <div class="library-title">BIBLIOTECA DE CRISTAL</div>
+                <div class="library-subtitle">Premios Coleccionables</div>
+            </div>
+            
+            <div class="library-grid" id="library-grid">
+                <!-- Tablas coleccionadas aparecerán aquí -->
+            </div>
+            
+            <div class="library-unlock-hint" id="library-unlock-hint">
+                <span>🔒</span> Completa el Nivel 3 de cada mundo para desbloquear tablas
+            </div>
+            
+            <button id="btn-close-library-ok" class="btn-understood">
+                ¡Genial! Continuar 🎮
+            </button>
+        </div>
+    </div>
+
+    <!-- Botón de Biblioteca de Cristal en el menú -->
+    <button id="btn-open-library" class="library-fab" title="Biblioteca de Cristal">
+        📚
+    </button>
+
+
+        <script type="module" src="./main.js"></script>
+</body>
+
+</html>

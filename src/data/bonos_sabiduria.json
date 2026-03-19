@@ -1,0 +1,39 @@
+{
+    "descubrimiento": "BIBLIOTECA DE CRISTAL",
+    "fase": 1,
+    "grado": 3,
+    "bonos": [
+        {
+            "id": "sumar_sabiduria",
+            "nivel_requerido": 5,
+            "titulo": "Tabla de Sumar (Cristal)",
+            "descripcion": "¡Felicidades! Has dominado la suma de centenas y unidades de mil.",
+            "icono": "➕",
+            "logro": "MAESTRO DE LA SUMA"
+        },
+        {
+            "id": "restar_sabiduria",
+            "nivel_requerido": 10,
+            "titulo": "Tabla de Restar (Cristal)",
+            "descripcion": "¡Excelente limpieza! Eres un maestro restando millares.",
+            "icono": "➖",
+            "logro": "MAESTRO DE LA RESTA"
+        },
+        {
+            "id": "multiplicar_sabiduria",
+            "nivel_requerido": 15,
+            "titulo": "Tabla de Multiplicar (Girasol)",
+            "descripcion": "¡Increíble duplicación de semillas! Te sabes las tablas de memoria.",
+            "icono": "✖️",
+            "logro": "MAESTRO DUPLICADOR"
+        },
+        {
+            "id": "dividir_sabiduria",
+            "nivel_requerido": 20,
+            "titulo": "Tabla de Dividir (Infinita)",
+            "descripcion": "¡Has repartido el granero perfectamente! Eres un estratega supremo.",
+            "icono": "➗",
+            "logro": "GUARDIÁN DEL GRANERO"
+        }
+    ]
+}
